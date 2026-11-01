@@ -1,0 +1,6 @@
+{
+  "name": "Binal Chavda Yoga Portfolio",
+  "description": "An interactive, motion-rich professional portfolio website for Binal Chavda, featuring 3D scrollbar effects, a customizable breathing guide, responsive soundscapes, and an animated cartoon yoga companion.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

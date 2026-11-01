@@ -1,0 +1,197 @@
+@import "tailwindcss";
+@import "@fontsource-variable/fraunces/full.css";
+@import "@fontsource-variable/fraunces/full-italic.css";
+@import "@fontsource-variable/dm-sans/index.css";
+
+/* Pinned scenes only run with room to breathe and motion allowed. */
+@custom-variant pin (@media (min-width: 1024px) and (min-height: 700px) and (prefers-reduced-motion: no-preference));
+
+/* Colours come from the studio photos: plaster, oak, and her sage, terracotta and plum kits. */
+:root {
+  --bg: #f6efe3;
+  --surface: #fdf9f1;
+  --ink: #2b211a;
+  --muted: #6b5e51;
+  --line: rgba(43, 33, 26, 0.16);
+  --sage: #4f6b59;
+  --terra: #a24e2a;
+  --plum: #5c3a47;
+  --sun: #e3a04f;
+  --shadow: rgba(84, 56, 30, 0.16);
+  --grain-opacity: 0.05;
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #17120e;
+  --surface: #221b15;
+  --ink: #f3e9d9;
+  --muted: #b8aa98;
+  --line: rgba(243, 233, 217, 0.16);
+  --sage: #a3c2ad;
+  --terra: #e49266;
+  --plum: #cf9fb0;
+  --sun: #f0b565;
+  --shadow: rgba(0, 0, 0, 0.45);
+  --grain-opacity: 0.035;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --font-display: "Fraunces Variable", Georgia, serif;
+  --font-body: "DM Sans Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-sage: var(--sage);
+  --color-terra: var(--terra);
+  --color-plum: var(--plum);
+  --color-sun: var(--sun);
+
+  /* Fixed colours for surfaces that stay dark in both themes. */
+  --color-cream: #fbf4e6;
+  --color-umber: #1e1712;
+  --color-kit-sage: #4f6b59;
+  --color-kit-terra: #a24e2a;
+  --color-kit-plum: #5c3a47;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+  background: var(--bg);
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--sun);
+  color: #1e1712;
+}
+
+:focus-visible {
+  outline: 2px solid var(--terra);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 340;
+  font-variation-settings: "SOFT" 100, "WONK" 0;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+
+.display em {
+  font-style: italic;
+  font-weight: 300;
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.arch {
+  border-radius: 999px 999px 0 0;
+}
+
+/* Masks each word so it can rise from below its own baseline. */
+.word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding: 0.08em 0.04em 0.16em;
+  margin: -0.08em -0.04em -0.16em;
+}
+
+.word-mask > * {
+  display: inline-block;
+  will-change: transform;
+}
+
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: var(--grain-opacity);
+}
+
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee var(--marquee-speed, 60s) linear infinite;
+}
+
+.marquee-track[data-reverse="true"] {
+  animation-direction: reverse;
+}
+
+.marquee-row:hover .marquee-track,
+.marquee-row:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
+.edge-fade {
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: 0.75; }
+  50% { transform: scale(1.14); opacity: 1; }
+}
+
+@keyframes sunbeam {
+  0%, 100% { opacity: 0.45; transform: translateX(-3%) rotate(14deg); }
+  50% { opacity: 0.8; transform: translateX(3%) rotate(14deg); }
+}
+
+.animate-spin-slow { animation: spin-slow 28s linear infinite; }
+.animate-breathe { animation: breathe 8s ease-in-out infinite; }
+.animate-sunbeam { animation: sunbeam 12s ease-in-out infinite; }
+
+/* Theme switch grows outward from the toggle as a circle of light. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) { z-index: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .marquee-track {
+    animation: none;
+  }
+}
